@@ -16,8 +16,12 @@ guessed_states = []
 
 
 while len(guessed_states) < 50:
-    usr_answer_state = screen.textinput(title="Guess the state.", prompt="Please enter another state name?").capitalize()
-
+    usr_answer_state = screen.textinput(title=f"{len(guessed_states)}/{50} states guessed!",
+                                        prompt="Please enter another state name?").title()
+    if usr_answer_state == "Exit":
+        states_to_learn = [state for state in all_states if state not in guessed_states]
+        new_data = pd.DataFrame(states_to_learn).to_csv("states to learn.csv")
+        break
     if usr_answer_state in all_states:
         guessed_states.append(usr_answer_state)
         t = turtle.Turtle()
@@ -26,7 +30,6 @@ while len(guessed_states) < 50:
         s_data = state_data[state_data.state == usr_answer_state]
         t.goto(int(s_data.x), int(s_data.y))
         t.write(usr_answer_state)
-
 
 screen.exitonclick()
 
